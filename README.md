@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Global Talent Pipeline CRM (Flint Healthcare)
 
-## Getting Started
+A specialized internal tool designed to manage international healthcare candidates (e.g., nurses) through a complex recruiting and immigration pipeline. The system is built for speed, data-density, and flexibility, prioritizing non-technical operations teams.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Kanban Pipeline Board**: Drag-and-drop candidates across stages (`Applied`, `Screening`, `Interview`, `Offer`, `Visa Processing`, `Placed`).
+- **Real-Time Search & Filtering**: Fast candidate lookup with debounced backend queries.
+- **Candidate Profile & Smart Timelines**: Detailed profiles with immutable timeline events. Dragging a card automatically logs a timestamped "Stage Change" event.
+- **Ops Dashboard**: High-level metrics showing total candidates, placement rates, pipeline bottlenecks, and distribution visualization.
+- **Notes System**: Append rich, contextual notes directly to a candidate's timeline.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 14 (App Router), React, Tailwind CSS, Lucide Icons, `@hello-pangea/dnd`
+- **Backend**: Next.js API Routes (RESTful)
+- **Database**: MongoDB (Mongoose ODMs)
+- **Language**: TypeScript
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Local Setup
 
-## Learn More
+1. **Clone & Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Database Configuration**
+   By default, the application connects to a local MongoDB instance. If you are using MongoDB Atlas or another URI, create a `.env.local` file in the root directory:
+   ```env
+   MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/flint-crm
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Seed the Database**
+   To populate the database with mock candidates and timeline activities:
+   ```bash
+   npm run seed
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Run the Development Server**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-## Deploy on Vercel
+## 🗄️ Database Schema
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Candidate Model
+- `name`, `email`, `country`
+- `stage` (Enum)
+- `tags` (Array of Strings)
+- `experience`, `specialization`
+- `status` (`Active`, `Rejected`, `On Hold`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Activity Model
+- `candidateId` (Reference to Candidate)
+- `type` (`stage_change`, `note`, `upload`)
+- `payload` (Flexible JSON containing contextual data like "from" and "to" stages)
+- `timestamp`, `userId`
+
+## 🧠 Future Roadmap
+
+- [ ] Connect actual LLM for the mock AI resume parsing endpoint (`/api/ai/parse-resume`).
+- [ ] Implement robust Authentication (e.g., Auth.js / NextAuth).
+- [ ] Add PDF document upload functionality with AWS S3 / Google Cloud Storage.
+- [ ] Implement Websockets / Server-Sent Events for live multi-user updates.
