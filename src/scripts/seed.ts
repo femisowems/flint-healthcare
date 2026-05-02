@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import connectToDatabase from '../utils/db';
 import Candidate from '../models/Candidate';
 import Activity from '../models/Activity';
 

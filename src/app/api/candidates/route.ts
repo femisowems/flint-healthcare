@@ -22,6 +22,7 @@ export async function GET(request: Request) {
     const candidates = await Candidate.find(query).sort({ createdAt: -1 });
     return NextResponse.json(candidates);
   } catch (error) {
+    console.error('Error fetching candidates:', error);
     return NextResponse.json({ error: 'Failed to fetch candidates' }, { status: 500 });
   }
 }
@@ -33,6 +34,7 @@ export async function POST(request: Request) {
     const candidate = await Candidate.create(body);
     return NextResponse.json(candidate, { status: 201 });
   } catch (error) {
+    console.error('Error creating candidate:', error);
     return NextResponse.json({ error: 'Failed to create candidate' }, { status: 500 });
   }
 }

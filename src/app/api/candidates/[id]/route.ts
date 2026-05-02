@@ -12,6 +12,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
     return NextResponse.json(candidate);
   } catch (error) {
+    console.error('Error fetching candidate:', error);
     return NextResponse.json({ error: 'Failed to fetch candidate' }, { status: 500 });
   }
 }
@@ -37,6 +38,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     const candidate = await Candidate.findByIdAndUpdate(params.id, body, { new: true });
     return NextResponse.json(candidate);
   } catch (error) {
+    console.error('Error updating candidate:', error);
     return NextResponse.json({ error: 'Failed to update candidate' }, { status: 500 });
   }
 }

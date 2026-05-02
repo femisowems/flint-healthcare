@@ -2,12 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Mail, MapPin, Briefcase, Tag, FileText, Send, User, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Mail, MapPin, Tag, FileText, Send, User, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 type Activity = {
   _id: string;
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   timestamp: string;
   userId: string;
@@ -16,6 +17,7 @@ type Activity = {
 export default function CandidateProfile() {
   const params = useParams();
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [candidate, setCandidate] = useState<any>(null);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +27,7 @@ export default function CandidateProfile() {
     if (params.id) {
       fetchCandidateData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   const fetchCandidateData = async () => {

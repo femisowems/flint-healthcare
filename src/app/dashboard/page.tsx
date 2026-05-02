@@ -105,7 +105,7 @@ export default function Dashboard() {
         <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
           <h3 className="text-base font-semibold text-gray-900 mb-6">Pipeline Distribution</h3>
           <div className="space-y-4">
-            {candidatesByStage.map((item, index) => (
+            {candidatesByStage.map((item) => (
               <div key={item.stage} className="flex items-center">
                 <div className="w-32 text-sm text-gray-600 font-medium">{item.stage}</div>
                 <div className="flex-1 flex items-center gap-3">

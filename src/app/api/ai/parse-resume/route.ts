@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       suggestedStage: 'Screening',
     });
   } catch (error) {
+    console.error('Error parsing resume:', error);
     return NextResponse.json({ error: 'Failed to parse resume' }, { status: 500 });
   }
 }

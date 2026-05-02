@@ -3,6 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IActivity extends Document {
   candidateId: mongoose.Types.ObjectId;
   type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   timestamp: Date;
   userId?: string;
