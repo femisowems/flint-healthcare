@@ -146,7 +146,7 @@ export default function SettingsPage() {
                     </label>
                     <label className="flex items-center gap-3">
                       <input type="checkbox" defaultChecked className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
-                      <span className="text-sm text-gray-700">Candidate reaches 'Offer' stage</span>
+                      <span className="text-sm text-gray-700">Candidate reaches &apos;Offer&apos; stage</span>
                     </label>
                     <label className="flex items-center gap-3">
                       <input type="checkbox" className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
