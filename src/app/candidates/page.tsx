@@ -4,11 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, MapPin, Briefcase, Mail } from 'lucide-react';
 import { Candidate } from '@/components/PipelineBoard';
+import AddCandidateModal from '@/components/AddCandidateModal';
 
 export default function CandidatesPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -49,7 +51,10 @@ export default function CandidatesPage() {
               className="pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-md w-72 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
+          <button 
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+          >
             Add Candidate
           </button>
         </div>
@@ -144,6 +149,12 @@ export default function CandidatesPage() {
           </table>
         </div>
       </div>
+
+      <AddCandidateModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+        onSuccess={() => fetchCandidates(searchQuery)} 
+      />
     </div>
   );
 }

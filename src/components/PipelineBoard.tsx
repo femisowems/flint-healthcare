@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 import { MapPin, Clock, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import AddCandidateModal from './AddCandidateModal';
 
 export type Candidate = {
   _id: string;
@@ -22,6 +23,7 @@ export default function PipelineBoard() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -107,7 +109,10 @@ export default function PipelineBoard() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="text-sm border border-gray-300 rounded-md px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
-          <button className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
+          <button 
+            onClick={() => setIsAddModalOpen(true)}
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+          >
             Add Candidate
           </button>
         </div>
@@ -189,6 +194,12 @@ export default function PipelineBoard() {
           ))}
         </div>
       </DragDropContext>
+
+      <AddCandidateModal 
+        isOpen={isAddModalOpen} 
+        onClose={() => setIsAddModalOpen(false)} 
+        onSuccess={() => fetchCandidates(searchQuery)} 
+      />
     </div>
   );
 }
