@@ -11,6 +11,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
   try {
     if (isDemoId(params.id)) {
       const now = new Date().toISOString();
+      const demoNames: Record<string, string> = {
+        'demo-1': 'Sarah Jenkins',
+        'demo-2': 'Miguel Fernandez',
+        'demo-3': 'Aisha Patel',
+        'demo-4': 'David Osei',
+        'demo-5': 'Elena Rostova',
+        'demo-6': 'Liam Chen',
+      };
       return NextResponse.json([
         {
           _id: 'demo-act-1',
@@ -18,7 +26,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
           actorName: 'Admin User',
           actorEmail: 'admin@flint.test',
           field: 'note',
-          payload: { text: 'Demo candidate loaded from fallback data.' },
+          payload: { text: `${demoNames[params.id] || 'Demo candidate'} loaded from fallback data.` },
           timestamp: now,
           userId: 'system',
         },

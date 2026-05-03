@@ -22,23 +22,12 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
 
     const sampleCandidates = [
-      {
-        name: 'Asha Patel', country: 'India', stage: 'Applied', tags: ['RN', 'ICU'],
-        assignedRecruiter: 'Admin User', assignedRecruiterEmail: 'admin@flint.test', experience: 5,
-        specialization: 'Critical Care', documents: { resume: { received: true, updatedAt: now } },
-        createdAt: now, updatedAt: now,
-      },
-      {
-        name: 'Mohammed Ali', country: 'Egypt', stage: 'Screening', tags: ['RN', 'Pediatrics'],
-        experience: 3, specialization: 'Pediatrics', documents: { resume: { received: false } },
-        createdAt: now, updatedAt: now,
-      },
-      {
-        name: 'Maria Gonzalez', country: 'Philippines', stage: 'Interview', tags: ['RN', 'ER'],
-        assignedRecruiter: 'Admin User', assignedRecruiterEmail: 'admin@flint.test', experience: 7,
-        specialization: 'Emergency', documents: { resume: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now } },
-        createdAt: now, updatedAt: now,
-      },
+      { name: 'Sarah Jenkins', email: 'sarah.j@example.com', country: 'United Kingdom', stage: 'Applied', tags: ['ICU', 'Registered Nurse'], assignedRecruiter: 'Priya Shah', assignedRecruiterEmail: 'priya@flint.test', experience: 5, specialization: 'Intensive Care', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now }, visaPacket: { received: false, updatedAt: now } }, createdAt: now, updatedAt: now },
+      { name: 'Miguel Fernandez', email: 'miguel.f@example.com', country: 'Philippines', stage: 'Screening', tags: ['Pediatric', 'Bilingual'], assignedRecruiter: 'Daniel Kim', assignedRecruiterEmail: 'daniel@flint.test', experience: 3, specialization: 'Pediatrics', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: false, updatedAt: now }, passport: { received: true, updatedAt: now }, visaPacket: { received: false, updatedAt: now } }, createdAt: now, updatedAt: now },
+      { name: 'Aisha Patel', email: 'aisha.p@example.com', country: 'India', stage: 'Interview', tags: ['ER', 'Trauma'], assignedRecruiter: 'Sofia Alvarez', assignedRecruiterEmail: 'sofia@flint.test', experience: 7, specialization: 'Emergency Room', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: true, updatedAt: now }, passport: { received: false, updatedAt: now }, visaPacket: { received: false, updatedAt: now } }, createdAt: now, updatedAt: now },
+      { name: 'David Osei', email: 'david.o@example.com', country: 'Ghana', stage: 'Offer', tags: ['Oncology', 'Travel Nurse'], assignedRecruiter: 'Priya Shah', assignedRecruiterEmail: 'priya@flint.test', experience: 4, specialization: 'Oncology', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now }, visaPacket: { received: false, updatedAt: now } }, createdAt: now, updatedAt: now },
+      { name: 'Elena Rostova', email: 'elena.r@example.com', country: 'Ukraine', stage: 'Visa Processing', tags: ['Surgical', 'Scrub Nurse'], assignedRecruiter: 'Daniel Kim', assignedRecruiterEmail: 'daniel@flint.test', experience: 8, specialization: 'Surgery', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now }, visaPacket: { received: false, updatedAt: now } }, createdAt: now, updatedAt: now },
+      { name: 'Liam Chen', email: 'liam.c@example.com', country: 'Singapore', stage: 'Placed', tags: ['Cardiology', 'Charge Nurse'], assignedRecruiter: 'Admin User', assignedRecruiterEmail: 'admin@flint.test', experience: 10, specialization: 'Cardiology', documents: { resume: { received: true, updatedAt: now }, nursingLicense: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now }, visaPacket: { received: true, updatedAt: now } }, createdAt: now, updatedAt: now },
     ];
 
     const createdCandidates = await Candidate.create(sampleCandidates) as Array<{ _id: mongoose.Types.ObjectId; name: string; assignedRecruiter?: string }>;

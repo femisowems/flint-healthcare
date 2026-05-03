@@ -60,6 +60,57 @@ export default function CandidateProfile() {
     },
   });
 
+  const draftStorageKey = `flint-candidate-draft-${params.id ?? 'unknown'}`;
+
+  useEffect(() => {
+    if (!params.id) return;
+
+    try {
+      const raw = window.localStorage.getItem(draftStorageKey);
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw) as {
+        note?: string;
+        profileDraft?: typeof profileDraft;
+        ownerDraft?: typeof ownerDraft;
+      };
+
+      if (typeof parsed.note === 'string') {
+        setNote(parsed.note);
+      }
+
+      if (parsed.profileDraft) {
+        setProfileDraft((prev) => ({ ...prev, ...parsed.profileDraft }));
+      }
+
+      if (parsed.ownerDraft) {
+        setOwnerDraft((prev) => ({
+          ...prev,
+          ...parsed.ownerDraft,
+          documents: {
+            ...prev.documents,
+            ...parsed.ownerDraft?.documents,
+          },
+        }));
+      }
+    } catch (error) {
+      console.warn('Failed to restore candidate draft', error);
+    }
+  }, [draftStorageKey, params.id]);
+
+  useEffect(() => {
+    if (!params.id || loading) return;
+
+    try {
+      window.localStorage.setItem(
+        draftStorageKey,
+        JSON.stringify({ note, profileDraft, ownerDraft }),
+      );
+    } catch (error) {
+      console.warn('Failed to persist candidate draft', error);
+    }
+  }, [draftStorageKey, loading, note, ownerDraft, params.id, profileDraft]);
+
   useEffect(() => {
     if (params.id) {
       fetchCandidateData();
@@ -175,6 +226,7 @@ export default function CandidateProfile() {
       setCandidate(updatedCandidate);
       fetchCandidateData();
       toast.success('Profile details saved');
+      window.localStorage.removeItem(draftStorageKey);
     } catch (error) {
       console.error('Failed to save profile details', error);
       toast.error('Failed to save profile details');
@@ -226,6 +278,7 @@ export default function CandidateProfile() {
       setCandidate(updatedCandidate);
       fetchCandidateData();
       toast.success('Ownership and documents saved');
+      window.localStorage.removeItem(draftStorageKey);
     } catch (error) {
       console.error('Failed to save ownership details', error);
       toast.error('Failed to save ownership details');
