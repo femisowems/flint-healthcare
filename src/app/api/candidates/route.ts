@@ -58,6 +58,7 @@ export async function POST(request: Request) {
       };
       return NextResponse.json(demoCandidate, { status: 201 });
     } catch (e) {
+      console.error('Error creating demo fallback candidate:', e);
       return NextResponse.json({ error: 'Failed to create candidate' }, { status: 500 });
     }
   }

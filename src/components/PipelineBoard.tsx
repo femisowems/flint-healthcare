@@ -41,6 +41,7 @@ export default function PipelineBoard() {
 
   useEffect(() => {
     // Add debounce for search
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const timer = setTimeout(() => {
       fetchCandidates(searchQuery);
     }, 300);
