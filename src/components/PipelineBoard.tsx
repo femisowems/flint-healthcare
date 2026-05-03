@@ -13,8 +13,18 @@ export type Candidate = {
   country: string;
   stage: string;
   tags: string[];
+  assignedRecruiter?: string;
+  assignedRecruiterEmail?: string;
+  interviewDate?: string;
+  documents?: {
+    resume?: { received: boolean; updatedAt?: string };
+    nursingLicense?: { received: boolean; updatedAt?: string };
+    passport?: { received: boolean; updatedAt?: string };
+    visaPacket?: { received: boolean; updatedAt?: string };
+  };
   experience?: number;
   specialization?: string;
+  createdAt: string;
   updatedAt: string;
 };
 
@@ -25,6 +35,8 @@ export default function PipelineBoard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [showIntroModal, setShowIntroModal] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -34,6 +46,13 @@ export default function PipelineBoard() {
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
+
+  useEffect(() => {
+    const hasSeenIntro = window.localStorage.getItem('flint-crm-intro-dismissed') === 'true';
+    if (!hasSeenIntro) {
+      setShowIntroModal(true);
+    }
+  }, []);
 
   const fetchCandidates = async (query = '') => {
     try {
@@ -89,6 +108,13 @@ export default function PipelineBoard() {
     }
   };
 
+  const closeIntroModal = () => {
+    if (dontShowAgain) {
+      window.localStorage.setItem('flint-crm-intro-dismissed', 'true');
+    }
+    setShowIntroModal(false);
+  };
+
   if (loading) {
     return (
       <div className="p-8 flex justify-center">
@@ -104,6 +130,45 @@ export default function PipelineBoard() {
 
   return (
     <div className="p-6 h-[calc(100vh-4rem)] overflow-hidden">
+      {showIntroModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl shadow-slate-950/20 border border-slate-200 overflow-hidden">
+            <div className="bg-gradient-to-r from-indigo-600 to-sky-500 px-6 py-5 text-white">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/80">Interview Demo</p>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight">Flint CRM is a working demo</h3>
+              <p className="mt-2 text-sm text-white/90">
+                This build was created to walk through the product during an interview. It shows the intended workflow, sample data, and prototype interactions.
+              </p>
+            </div>
+
+            <div className="px-6 py-5 space-y-4">
+              <p className="text-sm text-slate-600 leading-6">
+                You can explore the pipeline, candidate profiles, reminders, and audit timeline. Some actions are fully wired to the database, while others are intentionally scoped as prototype UX for discussion.
+              </p>
+
+              <label className="flex items-center gap-2 text-sm text-slate-600">
+                <input
+                  type="checkbox"
+                  checked={dontShowAgain}
+                  onChange={(e) => setDontShowAgain(e.target.checked)}
+                  className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                Don&apos;t show this again on this browser
+              </label>
+
+              <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+                <button
+                  onClick={closeIntroModal}
+                  className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                >
+                  Continue to app
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Pipeline</h2>
@@ -169,6 +234,10 @@ export default function PipelineBoard() {
                             <div className="flex items-center text-xs text-gray-500 mb-3 gap-1">
                               <MapPin className="w-3 h-3" />
                               {candidate.country}
+                            </div>
+
+                            <div className="text-[11px] text-gray-500 mb-2">
+                              Owner: <span className="font-medium text-gray-700">{candidate.assignedRecruiter || 'Unassigned'}</span>
                             </div>
 
                             <div className="flex flex-wrap gap-1 mt-2">

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Search, MapPin, Briefcase, Mail } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Search, MapPin, Briefcase, Mail, UserCircle2 } from 'lucide-react';
 import { Candidate } from '@/components/PipelineBoard';
 import AddCandidateModal from '@/components/AddCandidateModal';
 
@@ -10,8 +10,14 @@ export default function CandidatesPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [stageFilter, setStageFilter] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    setStageFilter(searchParams.get('stage') ?? '');
+  }, [searchParams]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -33,14 +39,28 @@ export default function CandidatesPage() {
     }
   };
 
+  const displayedCandidates = stageFilter
+    ? candidates.filter((candidate) => candidate.stage === stageFilter)
+    : candidates;
+
   return (
     <div className="p-8 max-w-6xl mx-auto h-screen flex flex-col">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">All Candidates</h2>
-          <p className="text-sm text-gray-500 mt-1">Directory of everyone in the system</p>
+          <p className="text-sm text-gray-500 mt-1">
+            {stageFilter ? `Showing candidates in ${stageFilter}` : 'Directory of everyone in the system'}
+          </p>
         </div>
         <div className="flex gap-4">
+          {stageFilter && (
+            <button
+              onClick={() => setStageFilter('')}
+              className="px-3 py-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Clear stage filter
+            </button>
+          )}
           <div className="relative">
             <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input 
@@ -77,6 +97,9 @@ export default function CandidatesPage() {
                 <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Experience
                 </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Owner
+                </th>
                 <th scope="col" className="relative px-6 py-3">
                   <span className="sr-only">View</span>
                 </th>
@@ -85,20 +108,20 @@ export default function CandidatesPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                     <div className="flex justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
                     </div>
                   </td>
                 </tr>
-              ) : candidates.length === 0 ? (
+              ) : displayedCandidates.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
                     No candidates found.
                   </td>
                 </tr>
               ) : (
-                candidates.map((candidate) => (
+                displayedCandidates.map((candidate) => (
                   <tr key={candidate._id} className="hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => router.push(`/candidate/${candidate._id}`)}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -129,6 +152,12 @@ export default function CandidatesPage() {
                       <div className="flex items-center">
                         <Briefcase className="w-4 h-4 mr-1 text-gray-400" />
                         {candidate.experience ? `${candidate.experience} Years` : 'N/A'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <div className="flex items-center">
+                        <UserCircle2 className="w-4 h-4 mr-1 text-gray-400" />
+                        {candidate.assignedRecruiter || 'Unassigned'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

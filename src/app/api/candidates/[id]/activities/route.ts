@@ -27,6 +27,9 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     const activity = await Activity.create({
       candidateId: params.id,
+      actorName: body.actorName || 'Admin User',
+      actorEmail: body.actorEmail || 'admin@flint.test',
+      field: body.field,
       ...body,
     });
     

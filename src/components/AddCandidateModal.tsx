@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
+const RECRUITER_OPTIONS = [
+  { label: 'Admin User', value: 'Admin User', email: 'admin@flint.test' },
+  { label: 'Priya Shah', value: 'Priya Shah', email: 'priya@flint.test' },
+  { label: 'Daniel Kim', value: 'Daniel Kim', email: 'daniel@flint.test' },
+  { label: 'Sofia Alvarez', value: 'Sofia Alvarez', email: 'sofia@flint.test' },
+];
+
 interface AddCandidateModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -15,15 +22,37 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
     email: '',
     country: '',
     stage: 'Applied',
+    assignedRecruiter: 'Admin User',
+    assignedRecruiterEmail: 'admin@flint.test',
+    interviewDate: '',
     experience: '',
     specialization: '',
     tags: '',
+    resume: true,
+    nursingLicense: false,
+    passport: false,
+    visaPacket: false,
   });
 
   if (!isOpen) return null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    if (name === 'assignedRecruiter') {
+      const selectedRecruiter = RECRUITER_OPTIONS.find((recruiter) => recruiter.value === value);
+      setFormData((prev) => ({
+        ...prev,
+        assignedRecruiter: value,
+        assignedRecruiterEmail: selectedRecruiter?.email || prev.assignedRecruiterEmail,
+      }));
+      return;
+    }
+
+    if (type === 'checkbox') {
+      setFormData(prev => ({ ...prev, [name]: checked }));
+      return;
+    }
+
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
@@ -36,6 +65,13 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
         ...formData,
         experience: formData.experience ? parseInt(formData.experience) : undefined,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+        interviewDate: formData.interviewDate || undefined,
+        documents: {
+          resume: { received: formData.resume },
+          nursingLicense: { received: formData.nursingLicense },
+          passport: { received: formData.passport },
+          visaPacket: { received: formData.visaPacket },
+        },
       };
 
       const res = await fetch('/api/candidates', {
@@ -51,7 +87,20 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
       onClose();
       // Reset form
       setFormData({
-        name: '', email: '', country: '', stage: 'Applied', experience: '', specialization: '', tags: ''
+        name: '',
+        email: '',
+        country: '',
+        stage: 'Applied',
+        assignedRecruiter: 'Admin User',
+        assignedRecruiterEmail: 'admin@flint.test',
+        interviewDate: '',
+        experience: '',
+        specialization: '',
+        tags: '',
+        resume: true,
+        nursingLicense: false,
+        passport: false,
+        visaPacket: false,
       });
     } catch (error) {
       console.error(error);
@@ -102,6 +151,21 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
 
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Assigned Recruiter</label>
+              <select name="assignedRecruiter" value={formData.assignedRecruiter} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-white">
+                {RECRUITER_OPTIONS.map((recruiter) => (
+                  <option key={recruiter.value} value={recruiter.value}>{recruiter.value}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Interview Date</label>
+              <input type="date" name="interviewDate" value={formData.interviewDate} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Experience (Years)</label>
               <input type="number" name="experience" value={formData.experience} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" min="0" />
             </div>
@@ -114,6 +178,28 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Tags (Comma separated)</label>
             <input type="text" name="tags" value={formData.tags} onChange={handleChange} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" placeholder="e.g. Pediatric, Bilingual" />
+          </div>
+
+          <div>
+            <p className="block text-sm font-medium text-gray-700 mb-2">Document Checklist</p>
+            <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" name="resume" checked={formData.resume} onChange={handleChange} className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                Resume received
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" name="nursingLicense" checked={formData.nursingLicense} onChange={handleChange} className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                Nursing license
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" name="passport" checked={formData.passport} onChange={handleChange} className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                Passport copy
+              </label>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" name="visaPacket" checked={formData.visaPacket} onChange={handleChange} className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4" />
+                Visa packet
+              </label>
+            </div>
           </div>
 
           <div className="mt-6 pt-4 border-t border-gray-100 flex justify-end gap-3">

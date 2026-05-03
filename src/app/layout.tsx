@@ -7,8 +7,8 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Flint Global Talent CRM',
-  description: 'Specialized healthcare recruitment CRM',
+  title: 'Flint CRM | Global Healthcare Talent Pipeline',
+  description: 'Specialized healthcare recruitment CRM for managing global talent pipelines.',
 };
 
 export default function RootLayout({

@@ -3,6 +3,9 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IActivity extends Document {
   candidateId: mongoose.Types.ObjectId;
   type: string;
+  actorName?: string;
+  actorEmail?: string;
+  field?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   timestamp: Date;
@@ -14,11 +17,18 @@ const ActivitySchema: Schema = new Schema({
   type: {
     type: String,
     required: true,
-    enum: ['stage_change', 'note', 'upload', 'email', 'status_change'],
+    enum: ['stage_change', 'profile_update', 'assignment_change', 'document_update', 'note', 'upload', 'email', 'status_change'],
   },
+  actorName: { type: String, default: 'System' },
+  actorEmail: { type: String },
+  field: { type: String },
   payload: { type: Schema.Types.Mixed }, // Flexible payload for different types
   timestamp: { type: Date, default: Date.now },
   userId: { type: String, default: 'system' }, // Mock user for now
 });
 
-export default mongoose.models.Activity || mongoose.model<IActivity>('Activity', ActivitySchema);
+if (mongoose.models.Activity) {
+  mongoose.deleteModel('Activity');
+}
+
+export default mongoose.model<IActivity>('Activity', ActivitySchema);

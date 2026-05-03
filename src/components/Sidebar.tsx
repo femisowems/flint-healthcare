@@ -17,8 +17,16 @@ export default function Sidebar() {
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col fixed left-0 top-0">
-      <div className="h-16 flex items-center px-6 border-b border-gray-100">
-        <h1 className="text-xl font-bold text-indigo-600 tracking-tight">Flint CRM</h1>
+      <div className="h-20 flex items-center px-6 border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 flex items-center justify-center text-white font-bold shadow-sm shadow-indigo-200">
+            F
+          </div>
+          <div className="flex flex-col leading-tight">
+            <h1 className="text-lg font-semibold text-slate-900 tracking-tight">Flint CRM</h1>
+            <p className="text-xs font-medium text-slate-500">Global healthcare talent, organized.</p>
+          </div>
+        </div>
       </div>
       
       <nav className="flex-1 p-4 space-y-1">
