@@ -3,8 +3,62 @@ import connectToDatabase from '@/utils/db';
 import Candidate from '@/models/Candidate';
 import Activity from '@/models/Activity';
 
+const DEMO_CANDIDATES: Record<string, unknown> = {
+  'demo-1': {
+    _id: 'demo-1',
+    name: 'Asha Patel',
+    email: 'asha@example.com',
+    country: 'India',
+    stage: 'Applied',
+    tags: ['RN', 'ICU'],
+    assignedRecruiter: 'Admin User',
+    assignedRecruiterEmail: 'admin@flint.test',
+    experience: 5,
+    specialization: 'Critical Care',
+    documents: { resume: { received: true }, nursingLicense: { received: false }, passport: { received: false }, visaPacket: { received: false } },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  'demo-2': {
+    _id: 'demo-2',
+    name: 'Mohammed Ali',
+    email: 'mohammed@example.com',
+    country: 'Egypt',
+    stage: 'Screening',
+    tags: ['RN', 'Pediatrics'],
+    experience: 3,
+    specialization: 'Pediatrics',
+    documents: { resume: { received: false }, nursingLicense: { received: false }, passport: { received: false }, visaPacket: { received: false } },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  'demo-3': {
+    _id: 'demo-3',
+    name: 'Maria Gonzalez',
+    email: 'maria@example.com',
+    country: 'Philippines',
+    stage: 'Interview',
+    tags: ['RN', 'ER'],
+    assignedRecruiter: 'Admin User',
+    assignedRecruiterEmail: 'admin@flint.test',
+    experience: 7,
+    specialization: 'Emergency',
+    documents: { resume: { received: true }, nursingLicense: { received: false }, passport: { received: true }, visaPacket: { received: false } },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+};
+
+function isDemoId(id: string) {
+  return id.startsWith('demo-');
+}
+
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
+    if (isDemoId(params.id) && DEMO_CANDIDATES[params.id]) {
+      return NextResponse.json(DEMO_CANDIDATES[params.id]);
+    }
+
     await connectToDatabase();
     const candidate = await Candidate.findById(params.id);
     if (!candidate) {
@@ -19,6 +73,12 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
+    if (isDemoId(params.id) && DEMO_CANDIDATES[params.id]) {
+      const body = await request.json();
+      const current = DEMO_CANDIDATES[params.id] as Record<string, unknown>;
+      return NextResponse.json({ ...current, ...body, updatedAt: new Date().toISOString() });
+    }
+
     await connectToDatabase();
     const body = await request.json();
     
