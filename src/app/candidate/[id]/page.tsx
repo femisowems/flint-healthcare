@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { ArrowLeft, Mail, MapPin, Tag, FileText, Send, User, ChevronRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import toast from 'react-hot-toast';
 
 type Activity = {
   _id: string;
@@ -62,8 +63,10 @@ export default function CandidateProfile() {
       const newActivity = await res.json();
       setActivities([newActivity, ...activities]);
       setNote('');
+      toast.success('Note added');
     } catch (error) {
       console.error('Failed to add note', error);
+      toast.error('Failed to add note');
     }
   };
 
@@ -77,8 +80,10 @@ export default function CandidateProfile() {
       const updatedCandidate = await res.json();
       setCandidate(updatedCandidate);
       fetchCandidateData(); // Refresh activities to get the stage_change event
+      toast.success(`Stage changed to ${newStage}`);
     } catch (error) {
       console.error('Failed to change stage', error);
+      toast.error('Failed to update stage');
     }
   };
 
@@ -181,7 +186,10 @@ export default function CandidateProfile() {
               ))}
             </select>
           </div>
-          <button className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => toast('More actions coming soon', { icon: '⚙️' })}
+            className="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
+          >
             Actions
           </button>
         </div>

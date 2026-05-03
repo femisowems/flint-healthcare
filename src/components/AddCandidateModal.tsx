@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface AddCandidateModalProps {
   isOpen: boolean;
@@ -45,6 +46,7 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
 
       if (!res.ok) throw new Error('Failed to create candidate');
       
+      toast.success('Candidate added successfully!');
       onSuccess();
       onClose();
       // Reset form
@@ -53,7 +55,7 @@ export default function AddCandidateModal({ isOpen, onClose, onSuccess }: AddCan
       });
     } catch (error) {
       console.error(error);
-      alert('Error creating candidate');
+      toast.error('Error creating candidate');
     } finally {
       setLoading(false);
     }

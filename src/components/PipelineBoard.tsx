@@ -5,6 +5,7 @@ import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea
 import { MapPin, Clock, MoreHorizontal } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import AddCandidateModal from './AddCandidateModal';
+import toast from 'react-hot-toast';
 
 export type Candidate = {
   _id: string;
@@ -67,16 +68,24 @@ export default function PipelineBoard() {
     );
 
     try {
-      await fetch(`/api/candidates/${draggableId}`, {
+      const res = await fetch(`/api/candidates/${draggableId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stage: newStage }),
       });
-      // Optionally refresh to get accurate timestamps etc
-      // fetchCandidates();
+      if (!res.ok) {
+        throw new Error('Failed to update stage');
+      }
+      
+      const movedCandidate = candidates.find(c => c._id === draggableId);
+      if (movedCandidate) {
+        toast.success(`Moved ${movedCandidate.name} to ${newStage}`);
+      }
     } catch (error) {
       console.error('Failed to update candidate stage', error);
-      // Revert optimism if needed (not implementing complex rollback for prototype)
+      toast.error('Failed to move candidate');
+      // Revert optimistic update
+      fetchCandidates(searchQuery);
     }
   };
 

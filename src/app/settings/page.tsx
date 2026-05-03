@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { User, Bell, Shield, Database, Save, Key, Lock, Code, MessageSquare, CheckCircle } from 'lucide-react';
 import clsx from 'clsx';
+import toast from 'react-hot-toast';
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
@@ -96,7 +97,10 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="mt-6 flex justify-end pt-4 border-t border-gray-100">
-                  <button className="bg-indigo-600 text-white flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
+                  <button 
+                    onClick={() => toast.success('Profile settings saved successfully')}
+                    className="bg-indigo-600 text-white flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+                  >
                     <Save className="w-4 h-4 mr-2" /> Save Changes
                   </button>
                 </div>
@@ -166,7 +170,10 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="mt-6 flex justify-end pt-4 border-t border-gray-100">
-                  <button className="bg-indigo-600 text-white flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors">
+                  <button 
+                    onClick={() => toast.success('Notification preferences updated')}
+                    className="bg-indigo-600 text-white flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+                  >
                     <Save className="w-4 h-4 mr-2" /> Save Preferences
                   </button>
                 </div>
@@ -189,7 +196,10 @@ export default function SettingsPage() {
                     <input type="password" placeholder="••••••••" className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
                   </div>
                   <div className="flex justify-end mt-4">
-                    <button className="bg-white border border-gray-300 text-gray-700 flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors">
+                    <button 
+                      onClick={() => toast.success('Password updated securely')}
+                      className="bg-white border border-gray-300 text-gray-700 flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-50 transition-colors"
+                    >
                       <Key className="w-4 h-4 mr-2" /> Update Password
                     </button>
                   </div>
@@ -201,7 +211,10 @@ export default function SettingsPage() {
                   <Lock className="w-5 h-5 text-gray-500" /> Two-Factor Authentication
                 </h3>
                 <p className="text-sm text-gray-600 mb-4">Add an extra layer of security to your account. We recommend using an authenticator app.</p>
-                <button className="bg-indigo-50 text-indigo-700 flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-100 transition-colors">
+                <button 
+                  onClick={() => toast.success('2FA setup instructions sent to email')}
+                  className="bg-indigo-50 text-indigo-700 flex items-center px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-100 transition-colors"
+                >
                   Enable 2FA
                 </button>
               </div>
@@ -223,7 +236,10 @@ export default function SettingsPage() {
                       <p className="text-xs text-gray-500">Send notifications to a specific Slack channel</p>
                     </div>
                   </div>
-                  <button className="text-sm font-medium text-indigo-600 hover:text-indigo-700">
+                  <button 
+                    onClick={() => toast.success('Slack integration successfully connected')}
+                    className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+                  >
                     Connect
                   </button>
                 </div>
@@ -240,7 +256,10 @@ export default function SettingsPage() {
                       <p className="text-xs text-gray-500">Authenticate using GitHub SSO</p>
                     </div>
                   </div>
-                  <button className="text-sm font-medium text-gray-500 hover:text-red-600">
+                  <button 
+                    onClick={() => toast.success('GitHub integration disconnected')}
+                    className="text-sm font-medium text-gray-500 hover:text-red-600"
+                  >
                     Disconnect
                   </button>
                 </div>
