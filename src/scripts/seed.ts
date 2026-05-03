@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import Candidate from '../models/Candidate';
 import Activity from '../models/Activity';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/flint-crm';
+const MONGODB_URI = process.env.SEED_MONGODB_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/flint-crm';
 
 const mockCandidates = [
   {
