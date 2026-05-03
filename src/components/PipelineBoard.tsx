@@ -54,18 +54,106 @@ export default function PipelineBoard() {
     }
   }, []);
 
+  // On first mount, ensure we have demo data available for client-only demos
+  useEffect(() => {
+    ensureClientSeeded();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const fetchCandidates = async (query = '') => {
     try {
       const url = query ? `/api/candidates?search=${encodeURIComponent(query)}` : '/api/candidates';
       const res = await fetch(url);
       const data = await res.json();
+
+      // If server returned an error payload (object) instead of array, treat as failure
+      if (!res.ok || !Array.isArray(data)) {
+        console.warn('Server candidates fetch failed or returned unexpected shape, falling back to client demo');
+        const local = window.localStorage.getItem('flint_demo_candidates');
+        if (local) {
+          setCandidates(JSON.parse(local));
+        } else {
+          const seeded = seedDemoCandidates();
+          setCandidates(seeded);
+        }
+        return;
+      }
+
       setCandidates(data);
     } catch (error) {
       console.error('Failed to fetch candidates', error);
+      const local = window.localStorage.getItem('flint_demo_candidates');
+      if (local) {
+        setCandidates(JSON.parse(local));
+      } else {
+        const seeded = seedDemoCandidates();
+        setCandidates(seeded);
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  function seedDemoCandidates() {
+    const now = new Date().toISOString();
+    const demo = [
+      {
+        _id: `demo-${Date.now()}-1`,
+        name: 'Asha Patel',
+        country: 'India',
+        stage: 'Applied',
+        tags: ['RN', 'ICU'],
+        assignedRecruiter: 'Admin User',
+        assignedRecruiterEmail: 'admin@flint.test',
+        experience: 5,
+        specialization: 'Critical Care',
+        documents: { resume: { received: true, updatedAt: now } },
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        _id: `demo-${Date.now()}-2`,
+        name: 'Mohammed Ali',
+        country: 'Egypt',
+        stage: 'Screening',
+        tags: ['RN', 'Pediatrics'],
+        assignedRecruiter: undefined,
+        assignedRecruiterEmail: undefined,
+        experience: 3,
+        specialization: 'Pediatrics',
+        documents: { resume: { received: false } },
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        _id: `demo-${Date.now()}-3`,
+        name: 'Maria Gonzalez',
+        country: 'Philippines',
+        stage: 'Interview',
+        tags: ['RN', 'ER'],
+        assignedRecruiter: 'Admin User',
+        assignedRecruiterEmail: 'admin@flint.test',
+        experience: 7,
+        specialization: 'Emergency',
+        documents: { resume: { received: true, updatedAt: now }, passport: { received: true, updatedAt: now } },
+        createdAt: now,
+        updatedAt: now,
+      },
+    ];
+
+    try {
+      window.localStorage.setItem('flint_demo_candidates', JSON.stringify(demo));
+    } catch (e) {
+      console.warn('Could not persist demo candidates to localStorage', e);
+    }
+
+    return demo;
+  }
+
+  async function ensureClientSeeded() {
+    // Try to fetch server candidates once; fetchCandidates will handle fallback.
+    await fetchCandidates('');
+  }
 
   const onDragEnd = async (result: DropResult) => {
     const { destination, source, draggableId } = result;
