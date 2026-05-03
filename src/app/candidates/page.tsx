@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Search, MapPin, Briefcase, Mail, UserCircle2 } from 'lucide-react';
 import { Candidate } from '@/components/PipelineBoard';
 import AddCandidateModal from '@/components/AddCandidateModal';
 
-export default function CandidatesPage() {
+function CandidatesTable() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -185,5 +185,19 @@ export default function CandidatesPage() {
         onSuccess={() => fetchCandidates(searchQuery)} 
       />
     </div>
+  );
+}
+
+export default function CandidatesPage() {
+  return (
+    <Suspense
+      fallback={(
+        <div className="p-8 max-w-6xl mx-auto h-screen flex items-center justify-center text-sm text-gray-500">
+          Loading candidates...
+        </div>
+      )}
+    >
+      <CandidatesTable />
+    </Suspense>
   );
 }
