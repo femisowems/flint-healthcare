@@ -6,6 +6,13 @@
 .pnp.js
 .yarn/install-state.gz
 
+# editors
+.vscode/
+.idea/
+
+# local tooling
+.turbo/
+
 # testing
 /coverage
 

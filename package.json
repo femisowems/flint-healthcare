@@ -4,11 +4,13 @@
   "description": "Global Talent Pipeline CRM - Specialized recruiting internal tool.",
   "private": true,
   "author": "Femi Sowemimo",
+  "packageManager": "npm@10.8.2",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "seed": "npx tsx src/scripts/seed.ts"
   },
   "dependencies": {
