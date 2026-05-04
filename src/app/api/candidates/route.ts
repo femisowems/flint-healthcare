@@ -36,11 +36,12 @@ export async function GET(request: Request) {
     
     const candidates = await Candidate.find(query).sort({ createdAt: -1 });
     if (!search && candidates.length === 0) {
+      console.warn('No candidates found in database, returning demo data');
       return NextResponse.json(demoCandidates());
     }
     return NextResponse.json(candidates);
   } catch (error) {
-    console.error('Error fetching candidates:', error);
+    console.error('Error fetching candidates:', error instanceof Error ? error.message : error);
     return NextResponse.json(demoCandidates());
   }
 }

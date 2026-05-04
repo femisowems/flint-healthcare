@@ -27,6 +27,11 @@ async function connectToDatabase() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      connectTimeoutMS: 10000,
+      retryWrites: true,
+      w: 'majority' as const,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
@@ -35,7 +40,12 @@ async function connectToDatabase() {
   }
   
   try {
-    cached.conn = await cached.promise;
+    cached.conn = await Promise.race([
+      cached.promise,
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Database connection timeout')), 15000)
+      ),
+    ]);
   } catch (e) {
     cached.promise = null;
     throw e;
