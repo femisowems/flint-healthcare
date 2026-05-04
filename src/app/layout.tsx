@@ -9,6 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Flint CRM | Global Healthcare Talent Pipeline',
   description: 'Specialized healthcare recruitment CRM for managing global talent pipelines.',
+  viewport: 'width=device-width, initial-scale=1',
 };
 
 export default function RootLayout({
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-slate-50 text-slate-900`}>
         <Sidebar />
-        <main className="ml-64 min-h-screen">
+        <main className="ml-0 lg:ml-64 min-h-screen transition-all duration-300 pt-16 lg:pt-0">
           {children}
         </main>
         <Toaster 

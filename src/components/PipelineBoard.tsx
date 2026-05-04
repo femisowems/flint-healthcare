@@ -266,7 +266,7 @@ export default function PipelineBoard() {
   }, {} as Record<string, Candidate[]>);
 
   return (
-    <div className="p-6 h-[calc(100vh-4rem)] overflow-hidden">
+    <div className="p-4 md:p-6 h-[calc(100vh-4rem)] overflow-hidden flex flex-col">
       {showIntroModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm">
           <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl shadow-slate-950/20 border border-slate-200 overflow-hidden">
@@ -306,23 +306,23 @@ export default function PipelineBoard() {
         </div>
       )}
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Pipeline</h2>
           <p className="text-sm text-gray-500 mt-1">Manage candidate flow and statuses</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           {/* Controls like filters, search */}
           <input 
             type="text" 
             placeholder="Search candidates..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="text-sm border border-gray-300 rounded-md px-3 py-2 w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="text-sm border border-gray-300 rounded-md px-3 py-2 w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <button 
             onClick={() => setIsAddModalOpen(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors whitespace-nowrap"
           >
             Add Candidate
           </button>
@@ -330,17 +330,17 @@ export default function PipelineBoard() {
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-6 h-full overflow-x-auto pb-8 items-start">
+        <div className="flex gap-3 md:gap-6 h-full overflow-x-auto pb-4 md:pb-8 items-start flex-1">
           {STAGES.map((stage) => (
-            <div key={stage} className="flex-shrink-0 w-80 bg-gray-100/50 rounded-lg flex flex-col max-h-full border border-gray-200">
+            <div key={stage} className="flex-shrink-0 w-[calc(100%-1rem)] sm:w-80 bg-gray-100/50 rounded-lg flex flex-col max-h-full border border-gray-200">
               <div className="p-3 border-b border-gray-200 flex items-center justify-between bg-gray-50/80 rounded-t-lg">
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-gray-700 text-sm">{stage}</h3>
-                  <span className="bg-gray-200 text-gray-600 text-xs py-0.5 px-2 rounded-full font-medium">
+                  <h3 className="font-semibold text-gray-700 text-sm truncate">{stage}</h3>
+                  <span className="bg-gray-200 text-gray-600 text-xs py-0.5 px-2 rounded-full font-medium shrink-0">
                     {candidatesByStage[stage]?.length || 0}
                   </span>
                 </div>
-                <button className="text-gray-400 hover:text-gray-600">
+                <button className="text-gray-400 hover:text-gray-600 shrink-0">
                   <MoreHorizontal className="w-4 h-4" />
                 </button>
               </div>

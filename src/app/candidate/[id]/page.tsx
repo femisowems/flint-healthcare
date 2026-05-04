@@ -286,10 +286,10 @@ export default function CandidateProfile() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-0rem)] overflow-hidden">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-0rem)] overflow-hidden">
       {/* Left Column: Profile Details */}
-      <div className="w-[400px] flex-shrink-0 border-r border-gray-200 bg-white overflow-y-auto">
-        <div className="p-6">
+      <div className="w-full lg:w-[400px] lg:flex-shrink-0 border-b lg:border-b-0 lg:border-r border-gray-200 bg-white overflow-y-auto">
+        <div className="p-4 md:p-6">
           <button 
             onClick={() => router.push('/')}
             className="flex items-center text-sm text-gray-500 hover:text-gray-900 mb-6 transition-colors"
@@ -301,18 +301,18 @@ export default function CandidateProfile() {
             <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 text-2xl font-bold mb-4">
               {candidate.name.charAt(0)}
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 leading-tight">{candidate.name}</h1>
-            <div className="flex items-center text-sm text-gray-500 mt-2">
-              <Mail className="w-4 h-4 mr-2" /> {candidate.email}
+            <h1 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight">{candidate.name}</h1>
+            <div className="flex items-center text-sm text-gray-500 mt-2 truncate">
+              <Mail className="w-4 h-4 mr-2 flex-shrink-0" /> <span className="truncate">{candidate.email}</span>
             </div>
             <div className="flex items-center text-sm text-gray-500 mt-2">
-              <MapPin className="w-4 h-4 mr-2" /> {candidate.country}
+              <MapPin className="w-4 h-4 mr-2 flex-shrink-0" /> {candidate.country}
             </div>
           </div>
 
           <div className="h-px bg-gray-100 my-6"></div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 text-sm md:text-base">
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Candidate Details</h3>
 
             <div className="space-y-3 rounded-lg border border-gray-200 bg-gray-50/60 p-4">
@@ -334,7 +334,7 @@ export default function CandidateProfile() {
                   className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs text-gray-500 mb-1">Country</label>
                   <input
@@ -376,7 +376,7 @@ export default function CandidateProfile() {
               </div>
               <button
                 onClick={handleProfileSave}
-                className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+                className="w-full inline-flex items-center justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700"
               >
                 <BadgeCheck className="mr-2 h-4 w-4" /> Save Profile Details
               </button>
@@ -428,7 +428,7 @@ export default function CandidateProfile() {
               </div>
               <div>
                 <label className="block text-xs text-gray-500 mb-2">Documents received</label>
-                <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                   {REQUIRED_DOCUMENTS.map((document) => (
                     <label key={document.key} className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-2">
                       <input
@@ -440,7 +440,7 @@ export default function CandidateProfile() {
                         }))}
                         className="rounded text-indigo-600 focus:ring-indigo-500 w-4 h-4"
                       />
-                      <span>{document.label}</span>
+                      <span className="text-sm">{document.label}</span>
                     </label>
                   ))}
                 </div>
@@ -450,7 +450,7 @@ export default function CandidateProfile() {
               </div>
               <button
                 onClick={handleOwnershipSave}
-                className="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                className="w-full inline-flex items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800"
               >
                 <BadgeCheck className="mr-2 h-4 w-4" /> Save Ownership
               </button>
@@ -473,10 +473,10 @@ export default function CandidateProfile() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Documents</h3>
             <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-              <div className="flex items-center">
-                <FileText className="w-5 h-5 text-gray-400 mr-3" />
-                <div>
-                  <p className="text-sm font-medium text-gray-900">Resume.pdf</p>
+              <div className="flex items-center min-w-0">
+                <FileText className="w-5 h-5 text-gray-400 mr-3 flex-shrink-0" />
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-gray-900 truncate">Resume.pdf</p>
                   <p className="text-xs text-gray-500">Uploaded {new Date(candidate.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
@@ -486,16 +486,16 @@ export default function CandidateProfile() {
       </div>
 
       {/* Right Column: Activity & Notes */}
-      <div className="flex-1 bg-gray-50 flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 bg-gray-50 flex flex-col overflow-hidden min-h-0">
         
         {/* Top Bar for Stage Control */}
-        <div className="bg-white border-b border-gray-200 px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-2 text-sm">
+        <div className="bg-white border-b border-gray-200 px-4 md:px-8 py-3 md:py-4 flex items-center justify-between shrink-0 flex-wrap gap-2">
+          <div className="flex items-center space-x-2 text-xs md:text-sm">
             <span className="text-gray-500 font-medium">Current Stage:</span>
             <select 
               value={candidate.stage}
               onChange={(e) => handleStageChange(e.target.value)}
-              className="bg-indigo-50 border-none text-indigo-700 font-semibold rounded-md py-1 pl-3 pr-8 focus:ring-0 cursor-pointer"
+              className="bg-indigo-50 border-none text-indigo-700 font-semibold rounded-md py-1 pl-3 pr-8 focus:ring-0 cursor-pointer text-sm"
             >
               {['Applied', 'Screening', 'Interview', 'Offer', 'Visa Processing', 'Placed'].map(s => (
                 <option key={s} value={s}>{s}</option>
@@ -511,11 +511,11 @@ export default function CandidateProfile() {
         </div>
 
         {/* Timeline & Notes Area */}
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 min-h-0">
           <div className="max-w-3xl mx-auto">
             
             {/* Note Input */}
-            <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 mb-8">
+            <div className="bg-white p-3 md:p-4 rounded-xl shadow-sm border border-gray-200 mb-6 md:mb-8">
               <textarea
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
@@ -523,14 +523,14 @@ export default function CandidateProfile() {
                 className="w-full border-none focus:ring-0 resize-none text-sm text-gray-900 placeholder-gray-400 p-0"
                 rows={3}
               />
-              <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mt-3 pt-3 border-t border-gray-100">
                 <div className="text-xs text-gray-400 flex items-center">
                   <User className="w-4 h-4 mr-1" /> admin@flint.test
                 </div>
                 <button 
                   onClick={handleAddNote}
                   disabled={!note.trim()}
-                  className="bg-indigo-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                  className="w-full sm:w-auto bg-indigo-600 text-white px-4 py-1.5 rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   <Send className="w-4 h-4 mr-2" /> Post
                 </button>
@@ -538,9 +538,9 @@ export default function CandidateProfile() {
             </div>
 
             {candidate.stage === 'Interview' && candidate.interviewDate && (
-              <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl shadow-sm mb-8">
+              <div className="bg-blue-50 border border-blue-100 p-3 md:p-4 rounded-xl shadow-sm mb-6 md:mb-8">
                 <div className="flex items-center gap-2 text-blue-800 font-semibold text-sm">
-                  <CalendarDays className="w-4 h-4" /> Interview reminder
+                  <CalendarDays className="w-4 h-4 flex-shrink-0" /> Interview reminder
                 </div>
                 <p className="text-sm text-blue-700 mt-2">
                   Interview scheduled for {new Date(candidate.interviewDate).toLocaleDateString()}. Keep the candidate warm and confirm documentation before the call.
@@ -550,11 +550,11 @@ export default function CandidateProfile() {
 
             {/* Timeline */}
             <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-6">Activity History</h3>
-            <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+            <div className="space-y-6">
               {activities.map((activity) => (
-                <div key={activity._id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                <div key={activity._id} className="flex gap-3 md:gap-4">
                   {/* Icon */}
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-white shadow flex-shrink-0 z-10">
                     {activity.type === 'stage_change' ? (
                       <ChevronRight className="w-5 h-5 text-indigo-500" />
                     ) : activity.type === 'note' ? (
@@ -565,14 +565,14 @@ export default function CandidateProfile() {
                   </div>
                   
                   {/* Card */}
-                  <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                    <div className="flex items-center justify-between mb-1">
+                  <div className="flex-1 bg-white p-3 md:p-4 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-1">
                       <span className="font-semibold text-gray-900 text-sm">
                         {activity.type === 'stage_change' ? 'Stage Changed' : activity.type === 'profile_update' ? 'Profile Updated' : activity.type === 'assignment_change' ? 'Ownership Changed' : activity.type === 'document_update' ? 'Documents Updated' : activity.type === 'note' ? 'Note Added' : 'Activity'}
                       </span>
-                      <time className="text-xs font-medium text-gray-500">{formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}</time>
+                      <time className="text-xs font-medium text-gray-500 shrink-0">{formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}</time>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-gray-400 mt-1 break-words">
                       {activity.actorName || activity.userId}
                       {activity.actorEmail ? ` · ${activity.actorEmail}` : ''}
                     </p>
@@ -586,7 +586,7 @@ export default function CandidateProfile() {
                           {Array.isArray(activity.payload?.changes) && (
                             <ul className="mt-2 space-y-1 text-xs text-gray-500">
                               {activity.payload.changes.map((change: { field: string; from: unknown; to: unknown }) => (
-                                <li key={change.field}>
+                                <li key={change.field} className="break-words">
                                   {change.field}: <strong>{String(change.from ?? 'Empty')}</strong> → <strong>{String(change.to ?? 'Empty')}</strong>
                                 </li>
                               ))}
@@ -601,7 +601,7 @@ export default function CandidateProfile() {
                         <span>{activity.actorName || activity.userId} updated the document checklist</span>
                       )}
                       {activity.type === 'note' && (
-                        <p className="whitespace-pre-wrap">{activity.payload?.text}</p>
+                        <p className="whitespace-pre-wrap break-words">{activity.payload?.text}</p>
                       )}
                     </div>
                   </div>

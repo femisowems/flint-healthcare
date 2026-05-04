@@ -241,19 +241,19 @@ export default function Dashboard() {
   );
 
   return (
-    <div className="p-8">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Ops Dashboard</h2>
+    <div className="p-4 md:p-8">
+      <div className="mb-6 md:mb-8">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900">Ops Dashboard</h2>
         <p className="text-sm text-gray-500 mt-1">High-level metrics and pipeline health</p>
       </div>
 
-      <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 flex-wrap">
         <div className="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
           {TIME_RANGES.map((range) => (
             <button
               key={range.value}
               onClick={() => setRangeDays(range.value)}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+              className={`px-2 sm:px-3 py-1.5 text-xs sm:text-sm font-medium rounded-md transition-colors ${
                 rangeDays === range.value
                   ? 'bg-indigo-600 text-white'
                   : 'text-gray-600 hover:bg-gray-50'
@@ -263,13 +263,13 @@ export default function Dashboard() {
             </button>
           ))}
         </div>
-        <p className="text-sm text-gray-500">
+        <p className="text-xs sm:text-sm text-gray-500">
           Showing candidates created in the last {rangeDays} days.
         </p>
       </div>
 
       {/* Top Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
         <MetricCard
           title="Total Candidates"
           value={String(totalCandidates)}
@@ -307,9 +307,9 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         {/* Pipeline Funnel */}
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
           <h3 className="text-base font-semibold text-gray-900 mb-6">Pipeline Distribution</h3>
           <div className="space-y-4">
             {candidatesByStage.map((item) => (
@@ -318,25 +318,25 @@ export default function Dashboard() {
                 onClick={() => openCandidates(item.stage)}
                 className="w-full flex items-center text-left rounded-lg px-2 py-1 transition-colors hover:bg-gray-50"
               >
-                <div className="w-32 text-sm text-gray-600 font-medium">{item.stage}</div>
-                <div className="flex-1 flex items-center gap-3">
+                <div className="w-24 sm:w-32 text-sm text-gray-600 font-medium truncate">{item.stage}</div>
+                <div className="flex-1 flex items-center gap-3 min-w-0">
                   <div className="h-4 bg-indigo-100 rounded-full flex-1 overflow-hidden">
                     <div 
                       className="h-full bg-indigo-600 rounded-full transition-all duration-500" 
                       style={{ width: `${maxCount > 0 ? (item.count / maxCount) * 100 : 0}%` }}
                     />
                   </div>
-                  <span className="w-8 text-right text-sm font-semibold text-gray-900">{item.count}</span>
+                  <span className="w-6 sm:w-8 text-right text-sm font-semibold text-gray-900 shrink-0">{item.count}</span>
                 </div>
               </button>
             ))}
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-base font-semibold text-gray-900">Recent Activity</h3>
-            <FileText className="w-5 h-5 text-gray-400" />
+            <FileText className="w-5 h-5 text-gray-400 shrink-0" />
           </div>
           <div className="space-y-4">
             {activities.length === 0 ? (
@@ -349,25 +349,25 @@ export default function Dashboard() {
                   className="w-full text-left rounded-lg border border-gray-100 p-3 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{getActivityLabel(activity)}</p>
-                      <p className="text-xs text-gray-500 mt-1">{activity.candidateId.name}</p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-gray-900 truncate">{getActivityLabel(activity)}</p>
+                      <p className="text-xs text-gray-500 mt-1 truncate">{activity.candidateId.name}</p>
                     </div>
-                    <span className="text-[11px] text-gray-400 shrink-0">
+                    <span className="text-[11px] text-gray-400 shrink-0 whitespace-nowrap">
                       {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2 max-h-10 overflow-hidden">{getActivityBody(activity)}</p>
+                  <p className="text-sm text-gray-600 mt-2 max-h-10 overflow-hidden line-clamp-2">{getActivityBody(activity)}</p>
                 </button>
               ))
             )}
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+        <div className="bg-white p-4 md:p-6 rounded-xl border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-base font-semibold text-gray-900">Interview Queue & SLA Breaches</h3>
-            <CalendarClock className="w-5 h-5 text-gray-400" />
+            <h3 className="text-base font-semibold text-gray-900 truncate">Interview Queue & SLA Breaches</h3>
+            <CalendarClock className="w-5 h-5 text-gray-400 shrink-0" />
           </div>
 
           <div className="space-y-6">
@@ -384,11 +384,11 @@ export default function Dashboard() {
                         className="w-full text-left rounded-lg border border-gray-100 px-3 py-2 hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-medium text-gray-900">{candidate.name}</p>
-                            <p className="text-xs text-gray-500 mt-1">{candidate.interviewDate ? `Interview on ${new Date(candidate.interviewDate).toLocaleDateString()}` : 'Interview stage'} · {candidate.country}</p>
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium text-gray-900 truncate">{candidate.name}</p>
+                            <p className="text-xs text-gray-500 mt-1 truncate">{candidate.interviewDate ? `Interview on ${new Date(candidate.interviewDate).toLocaleDateString()}` : 'Interview stage'} · {candidate.country}</p>
                           </div>
-                          <span className="text-[11px] text-gray-400">
+                          <span className="text-[11px] text-gray-400 shrink-0 whitespace-nowrap">
                             {candidate.assignedRecruiter || 'Unassigned'}
                           </span>
                         </div>
