@@ -1,9 +1,22 @@
 {
   "name": "flint-healthcare",
   "version": "1.0.0",
-  "description": "Global Talent Pipeline CRM - Specialized recruiting internal tool.",
+  "description": "Flint Healthcare CRM is a responsive global talent pipeline app for healthcare recruiting teams.",
   "private": true,
   "author": "Femi Sowemimo",
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "mongodb",
+    "healthcare",
+    "recruiting",
+    "crm",
+    "talent-pipeline"
+  ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "packageManager": "npm@10.8.2",
   "scripts": {
     "dev": "next dev",
@@ -11,6 +24,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "check-db": "npx tsx scripts/check-db.ts",
     "seed": "npx tsx src/scripts/seed.ts",
     "seed:local": "SEED_MONGODB_URI=mongodb://localhost:27017/flint-crm npx tsx src/scripts/seed.ts"
   },

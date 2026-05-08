@@ -12,12 +12,23 @@
 
 # local tooling
 .turbo/
+.cache/
+.eslintcache
+.swc/
+.vercel/output/
+.vercel_build_output/
+
+# local db / runtime artifacts
+*.lock
+*.seed
+*.sqlite
 
 # testing
 /coverage
 
 # next.js
 /.next/
+/.next/cache/
 /out/
 
 # production
